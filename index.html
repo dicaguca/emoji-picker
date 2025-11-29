@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emoji Picker</title>
+    
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239333EA' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z'/%3E%3C/svg%3E">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body { margin: 0; padding: 0; font-family: 'Nunito', sans-serif; }
+    </style>
+</head>
+<body>
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        // Simple Check icon component (replacing Lucide-react to avoid external dependencies)
+        const CheckIcon = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+                <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+        );
+
+        function EmojiSymbolPicker() {
+            const [copiedItem, setCopiedItem] = useState(null);
+            const [activeTab, setActiveTab] = useState('frequently used');
+
+            const symbols = {
+                'frequently used': ['🌞💛', '🌞', '☀️', '✨', '🍃', '🙏', '💪', '⭐', '🔥', '✅', '☑️', '💛', '🧡', '❤️', '💙', '💜', '🧠', '👣', '🙌', '👌', '✌️', '🏄‍♀️', '🌀', '🌎', '🪄', '🌟', '🌙', '🌈', '⛵', '🕉', '🐒', '🦉', '🐱', '🐈', '🐸'],
+                hearts: ['❤️', '🧡', '💛', '💚', '💙', '💜', '💕', '💞', '💖', '💔'],
+                faces: [
+                '🙂', '😊', '😌', '😄', '😁', '🥹', '🙃', '🫠', '😅',
+                '😐', '😑', '😶', '🫥', '😶‍🌫️', '🫤', '🤨', '🙄',
+                '😕', '🙁', '☹️', '😢', '😭', '🥺', '😔', '😞',
+                '😓', '😵', '😵‍💫', '🥴', '😫', '😖', '😱',
+                '😎', '🥳', '😏', '😘', '🤩', '😍', '😬', '🤯'
+                ],
+                'habits tracker': ['✅', '☑️', '❌', '⚠️', '🌞', '🌙', '💡', '📺', '💪', '🌚'],
+                'icons & symbols': ['🔴', '🟠', '🟡', '🟢', '🔵', '🟣', '🔶', '🔷', '✅', '❌', '⚠️', '☑️', '⬜', '✴️', '✳️', '❇️', '🔲', '⬜', '💟', '🧩', '📣', '🏔️', '🗓️', '🎯', '🔔', '⭐', '🏆', '🤝', '🌟', '✨', '⚡', '💫', '〽️'],
+                celebration: ['🎉', '🎊', '🥳', '🎈', '🎆', '🎇', '✨', '🌟', '💫', '🎁', '🎂', '🍰', '🧁', '🥂', '🍾', '🎵', '🎶', '🎼', '🎤', '🪩', '🕺', '💃', '🙌', '👏', '🤩', '😍', '🔥', '💯', '🏆', '🥇', '🎯'],
+                'flowers & plants': ['🌸', '🌼', '🌺', '🌹', '🥀', '🌻', '💐', '🌷', '🪷', '🪻', '🌱', '🌿', '☘️', '🍀', '🍃', '🍂', '🍁', '🌴', '🌳'],
+                'text symbols': ['»', '•', '·', '➜', '—', '✦', '⟢', '★', '⋆', 'ᶻz', '≋', '☊', '❛', '❜', '✓', '🕫', '🕬', '🕭', '♬', '|']
+            };
+
+            const copyToClipboard = (item) => {
+                navigator.clipboard.writeText(item);
+                setCopiedItem(item);
+                setTimeout(() => setCopiedItem(null), 1500);
+            };
+
+            const tabs = Object.keys(symbols);
+
+            const tabColors = {
+                'frequently used': 'bg-gradient-to-r from-orange-400 to-pink-500',
+                'hearts': 'bg-gradient-to-r from-pink-500 to-red-500',
+                'faces': 'bg-gradient-to-r from-yellow-400 to-orange-500',
+                'habits tracker': 'bg-gradient-to-r from-blue-400 to-indigo-500',
+                'icons & symbols': 'bg-gradient-to-r from-purple-400 to-violet-500',
+                'celebration': 'bg-gradient-to-r from-fuchsia-400 to-pink-500',
+                'flowers & plants': 'bg-gradient-to-r from-pink-400 to-green-500',
+                'text symbols': 'bg-gradient-to-r from-slate-500 to-gray-600'
+            };
+
+            return (
+                <div className="min-h-screen w-full bg-gradient-to-br from-amber-100 via-orange-200 to-emerald-200 p-6">
+                
+                <div className="max-w-5xl mx-auto bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl p-8">
+                    <h1 className="text-4xl font-extrabold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">Emoji Picker</h1>
+                    <p className="text-gray-600 mb-8 font-semibold">Click any emoji or symbol to copy it instantly ✨</p>
+
+                    {/* Tabs */}
+                    <div className="flex flex-wrap gap-3 mb-8">
+                    {tabs.map((tab) => (
+                        <button
+                        key={tab}
+                        onClick={() => setActiveTab(tab)}
+                        className={`px-4 py-2.5 rounded-xl font-bold transition-all transform hover:scale-105 active:scale-95 shadow-md ${
+                            activeTab === tab
+                            ? `${tabColors[tab]} text-white shadow-lg`
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        }`}
+                        >
+                        {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                        </button>
+                    ))}
+                    </div>
+
+                    {/* Grid of symbols */}
+                    <div className="grid grid-cols-10 sm:grid-cols-12 md:grid-cols-16 gap-2">
+                    {symbols[activeTab].map((item, index) => (
+                        <button
+                        key={index}
+                        onClick={() => copyToClipboard(item)}
+                        className={`relative ${item === '🌞💛' ? 'col-span-2' : 'aspect-square'} flex items-center justify-center bg-gradient-to-br from-white to-gray-50 border-2 border-gray-200 rounded-xl hover:border-purple-400 hover:shadow-xl hover:scale-110 transition-all active:scale-95 shadow-md ${
+                            activeTab === 'text symbols' ? 'text-base' : 'text-xl'
+                        }`}
+                        >
+                        {item}
+                        {copiedItem === item && (
+                            <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-500 bg-opacity-95 rounded-xl flex items-center justify-center">
+                            <CheckIcon />
+                            </div>
+                        )}
+                        </button>
+                    ))}
+                    </div>
+
+                    {/* Copy notification */}
+                    {copiedItem && (
+                    <div className="mt-6 p-4 bg-gradient-to-r from-green-400 to-emerald-500 rounded-2xl text-center text-white font-bold shadow-lg">
+                        Copied "{copiedItem}" to clipboard! ✓
+                    </div>
+                    )}
+                </div>
+                </div>
+            );
+        }
+
+        // Render the app
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<EmojiSymbolPicker />);
+    </script>
+</body>
+</html>
