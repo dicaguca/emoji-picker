@@ -39,7 +39,7 @@
             const [activeTab, setActiveTab] = useState('frequently used');
 
             const symbols = {
-                'frequently used': ['💛🌞', '🌞', '☀️', '✨', '🍃', '🙏', '💪', '⭐', '🔥', '💛', '🧡', '❤️', '💙', '💜', '🧠', '👣', '🙌', '👌', '✌️', '🏄‍♀️', '🌀', '🌎', '🪄', '🌟', '🌙', '🌈', '⛵', '🕉', '🐒', '🦉', '🐱', '🐈', '🐸', '✅', '☑️'],
+                'frequently used': ['🌞💛', '🙏✨' '🌞', '☀️', '✨', '🍃', '🙏', '💪', '🙂', '⭐', '🔥', '💛', '🧡', '❤️', '💙', '💜', '🧠', '👣', '🙌', '👌', '✌️', '🏄‍♀️', '🌀', '🌎', '🪄', '🌟', '🌙', '🌈', '⛵', '🕉', '🐒', '🦉', '🐱', '🐈', '🐸', '✅', '☑️'],
                 hearts: ['❤️', '🧡', '💛', '💚', '💙', '💜', '💕', '💞', '💖', '💓', '💔'],
                 faces: [
                 '🙂', '😊', '😌', '😄', '😁', '🥹', '🙃', '🫠', '😅', '🫡',
@@ -104,8 +104,8 @@
                         <button
                         key={index}
                         onClick={() => copyToClipboard(item)}
-                        className={`relative ${item === '🌞💛' ? 'col-span-2' : 'aspect-square'} flex items-center justify-center bg-gradient-to-br from-white to-gray-50 border-2 border-gray-200 rounded-xl hover:border-purple-400 hover:shadow-xl hover:scale-110 transition-all active:scale-95 shadow-md ${
-                            activeTab === 'text symbols' ? 'text-base' : 'text-xl'
+                        className={`relative ${['🌞💛', '🙏✨'].includes(item) ? 'col-span-3' : 'aspect-square'} flex items-center justify-center bg-gradient-to-br from-white to-gray-50 border-2 border-gray-200 rounded-xl hover:border-purple-400 hover:shadow-xl hover:scale-110 transition-all active:scale-95 shadow-md ${
+                             activeTab === 'text symbols' ? 'text-base' : 'text-xl'
                         }`}
                         >
                         {item}
